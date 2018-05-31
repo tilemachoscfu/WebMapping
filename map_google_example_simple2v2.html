@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>V2 tow markers with labels</title>
+    <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height:100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+   <script type="text/javascript">
+      // Multiple Markers
+      var locations = [
+          ['Zara Vouliagmenis', 37.939771, 23.740331, 10],
+          ['Zara Ermou', 37.975759, 23.732745, 9],
+          ['Zara Ermou II', 37.976261, 23.729303, 8],
+          ['Zara Stadiou', 37.979600, 23.732117, 7],
+          ['Zara Stadiou II', 37.983293, 23.729071, 6],
+          ['Zara 28 Oktovriou', 37.999365, 23.733575, 5],
+          ['Zara Patision', 37.999770,  23.733086, 4],
+          ['Zara Kallitheas', 37.957807, 23.704887, 3],
+          ['Zara Nea Smyrni', 37.946859, 23.711197, 2],
+          ['Zara Peiraia', 37.941151, 23.647791, 1]
+      ];
+      // Create map
+      var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
+      center: new google.maps.LatLng(37.975753, 23.733872),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    // Change default markers to blue ones.
+    var image = {
+    url: 'https://cdn2.iconfinder.com/data/icons/snipicons/500/map-marker-256.png',
+    scaledSize: new google.maps.Size(30, 32)
+  };
+    
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+    // Loop throught each location
+    for (i = 0; i < locations.length; i++) { 
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map,
+        icon: image
+      });
+      // Add the info window
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+
+    var cityCircle = new google.maps.Circle({
+      strokeColor: '#6495ED',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#6495ED',
+      fillOpacity: 0.35,
+      map: map,
+      center: {
+        lat: 37.975753,
+        lng: 23.733872
+      },
+      radius: 100
+    });
+
+    var triangleCoords = [
+            {lat: 38.032348, lng: 23.729421},
+            {lat: 37.927021, lng: 23.618698},
+            {lat: 37.926712, lng: 23.833461}
+        ];
+
+
+    var emptyTriangle = new google.maps.Polygon({
+      paths: triangleCoords,
+      strokeColor: '#6495ED',
+      strokeOpacity: 0.8,
+      strokeWeight: 3,
+      fillColor: 'transparent',
+      fillOpacity: 0.5
+
+    });
+    emptyTriangle.setMap(map);
+
+    var storePath = [
+          {lat:37.939771, lng:23.740331},
+          {lat:37.946859, lng:23.711197}
+    ]
+
+    var storeConnection = new google.maps.Polyline({
+          path: storePath,
+          geodesic: true,
+          strokeColor: '#7FFF00',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+    storeConnection.setMap(map);
+}
+
+  </script>
+  </body>
+</html>
